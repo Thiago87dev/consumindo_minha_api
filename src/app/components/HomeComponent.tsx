@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Search from "./Search";
+import Filter from "./Filter";
 
 interface Category {
   id: number;
@@ -23,30 +25,49 @@ const HomeComponent = () => {
   const router = useRouter();
 
   const page = parseInt(searchParams.get("page") || "1");
+  const searchTerm = searchParams.get("search") || "";
+  const selectedCategory = searchParams.get("category") || "";
 
   useEffect(() => {
     const fetchItems = async () => {
-      const res = await fetch(`http://127.0.0.1:8000/api/items/?page=${page}`);
+      const res = await fetch(
+        `http://127.0.0.1:8000/api/items/?page=${page}&search=${searchTerm}&category=${selectedCategory}`
+      );
       const data = await res.json();
       setItems(data.results || []);
       setTotalPages(data.count ? Math.ceil(data.count / 4) : 0); // Calcule o total de páginas
     };
     fetchItems();
-  }, [page]);
+  }, [page, searchTerm, selectedCategory]);
 
   const handlePageChange = (newPage: number) => {
-    router.push(`/?page=${newPage}`);
+    if (searchTerm) {
+      router.push(`/?page=${newPage}&search=${searchTerm}`);
+    } else if (selectedCategory) {
+      router.push(`/?page=${newPage}&category=${selectedCategory}`);
+    } else if (searchTerm && selectedCategory) {
+      router.push(
+        `/?page=${newPage}&search=${searchTerm}&category=${selectedCategory}`
+      );
+    } else {
+      router.push(`/?page=${newPage}`);
+    }
   };
 
   return (
     <div className="flex flex-col items-center justify-between h-[600px] gap-4 m-10">
       <div className="flex flex-col items-center gap-4 m-10">
-        <Link href="/" className="text-5xl">
+        <Link href="/" className="text-5xl mb-10">
           Items
         </Link>
+        <Search />
+        <Filter />
         <ul>
           {items.map((item) => (
-            <Link key={item.id} href={`/${item.id}?page=${page}`}>
+            <Link
+              key={item.id}
+              href={`/${item.id}?page=${page}&search=${searchTerm}&category=${selectedCategory}`}
+            >
               <li>
                 {item.name} - Categoria: {item.category.name}
               </li>
@@ -59,7 +80,7 @@ const HomeComponent = () => {
           <button
             className={`${page == 1 ? "text-gray-500" : "text-green-500"}`}
             onClick={() => handlePageChange(page - 1)}
-            disabled={page === 1}
+            disabled={page === 1 || totalPages === 0}
           >
             Anterior
           </button>
@@ -68,10 +89,14 @@ const HomeComponent = () => {
           </span>
           <button
             className={`${
-              page == totalPages ? "text-gray-500" : "text-green-500"
+              page == totalPages
+                ? "text-gray-500"
+                : totalPages === 0
+                ? "text-gray-500"
+                : "text-green-500"
             }`}
             onClick={() => handlePageChange(page + 1)}
-            disabled={page === totalPages}
+            disabled={page === totalPages || totalPages === 0}
           >
             Próxima
           </button>

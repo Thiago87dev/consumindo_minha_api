@@ -76,7 +76,7 @@ const UpdateItem = ({ id, router }: UpdateItemProps) => {
   };
 
   return (
-    <div className="w-2/4 mx-auto m-20 text-black items-center">
+    <div className="w-2/4 mx-auto m-20 text-black items-center ">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-black">
         <h2 className="text-2xl text-white"> Editar item</h2>
         <input
@@ -104,7 +104,7 @@ const UpdateItem = ({ id, router }: UpdateItemProps) => {
             </option>
           ))}
         </select>
-        <button type="submit" className="bg-blue-500 text-white p-2">
+        <button type="submit" className="bg-blue-500 text-white p-2 ">
           Atualizar item
         </button>
       </form>

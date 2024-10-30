@@ -20,37 +20,46 @@ export interface ItemProps {
 const Itemdatail = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params); // pega o id da url
   const router = useRouter();
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
-  const page = searchParams.get('page') || 1
+  const page = searchParams.get("page") || 1;
+  const searchTerm = searchParams.get("search") || "";
+  const selectedCategory = searchParams.get("category") || "";
 
   const [item, setItem] = useState<ItemProps | null>(null);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchItem = async () => {
-      const res = await fetch(`http://127.0.0.1:8000/api/items/${id}/`)
-      if(!res.ok) {
-        setItem(null)
+      const res = await fetch(`http://127.0.0.1:8000/api/items/${id}/`);
+      if (!res.ok) {
+        setItem(null);
       } else {
-        const data = await res.json()
-        setItem(data)
+        const data = await res.json();
+        setItem(data);
       }
-    }
-    fetchItem()
-  },[id])
+    };
+    fetchItem();
+  }, [id]);
 
   if (!item) {
-    return(
-        <div>
-            <h1>Item não encontrado</h1>
-            <BtnVoltar endereço="/" page={page} router={router}/>
-        </div>
-    ) 
+    return (
+      <div>
+        <h1>Item não encontrado</h1>
+        <BtnVoltar endereço="/" page={page} router={router} />
+      </div>
+    );
   }
 
   return (
     <div className="">
-        <Detail item={item} page={page} router={router} id={id}/> 
+      <Detail
+        item={item}
+        page={page}
+        router={router}
+        id={id}
+        searchTerm={searchTerm}
+        selectedCategory={selectedCategory}
+      />
     </div>
   );
 };

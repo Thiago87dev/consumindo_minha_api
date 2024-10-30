@@ -63,7 +63,7 @@ const CreateItem = ({router}: CreateItemProps) => {
     });
     if (res.ok) {
       const createdItem = await res.json();
-      alert(`Item criado com sucesso ${createdItem.name}`);
+      alert(`Item criado com sucesso: ${createdItem.name}`);
       router.push(`/`)
     } else {
       alert("Erro ao criar o item");
@@ -73,7 +73,7 @@ const CreateItem = ({router}: CreateItemProps) => {
   return (
     <div className="w-2/4 mx-auto m-20 text-black items-center">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <h2 className="text-2xl text-white" > criar novo item</h2>
+        <h2 className="text-2xl text-white" > Criar novo item</h2>
         <input
           type="text"
           value={name}

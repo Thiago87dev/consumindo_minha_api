@@ -8,9 +8,11 @@ interface DetailProps {
   router: AppRouterInstance;
   page: string | number;
   id: string
+  searchTerm?: string
+  selectedCategory?: string
 }
 
-const Detail = ({ item, router, page, id }: DetailProps) => {
+const Detail = ({ item, router, page, id, searchTerm, selectedCategory }: DetailProps) => {
   return (
     <div>
       {item && (
@@ -27,7 +29,7 @@ const Detail = ({ item, router, page, id }: DetailProps) => {
             </button>
           </div>
           <div>
-            <BtnVoltar endereço="/" page={page} router={router} />
+            <BtnVoltar endereço="/" page={page} router={router} searchTerm={searchTerm} selectedCategory={selectedCategory} />
           </div>
         </div>
       )}
