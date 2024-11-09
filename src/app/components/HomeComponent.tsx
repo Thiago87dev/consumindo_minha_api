@@ -104,6 +104,9 @@ const HomeComponent = () => {
         <div>
           <Link href={`/create_item/?page=${page}`}>Criar novo item</Link>
         </div>
+        <div>
+          <Link href={`/adicao/`}>Soma aleatória</Link>
+        </div>
       </div>
     </div>
   );
